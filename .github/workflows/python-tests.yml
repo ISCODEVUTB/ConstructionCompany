@@ -1,0 +1,46 @@
+name: Ejecución de Pruebas Python
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # Opcional: límite de tiempo
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"  # Cambia a tu versión
+        
+    - name: Cache de dependencias
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: ${{ runner.os }}-pip-
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        [ -f requirements.txt ] && pip install -r requirements.txt
+
+    - name: Ejecutar pruebas
+      run: pytest tests/ --cov=src --cov-report=xml  # Opcional: con cobertura
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src  # Si usas directorio src/
+
+    - name: Subir reporte de cobertura
+      if: always()  # Se ejecuta aunque fallen las pruebas
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
