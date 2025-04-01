@@ -55,12 +55,4 @@
 ##  Licencia  
 MIT © 2025 - [Universidad Tecnológica de Bolívar](https://www.unitecnologica.edu.co/)  
 
----
 
-###  ¿Por qué esta estructura?  
-1. **Alto impacto visual**: Badges y tablas para información clave.  
-2. **Prioriza lo técnico**: Instalación, pruebas e integraciones primero.  
-3. **Vincula al SRS**: Incluye referencia directa al documento de requisitos.  
-4. **Adaptable**: Secciones modulares para añadir/eliminar según necesidades.  
-
-###  Bonus: Añade un GIF de demostración  
