@@ -38,17 +38,6 @@
 | DevOps        | Docker, GitHub Actions, AWS |  
 | APIs          | REST (OAuth 2.0), Swagger |  
 
----
-
-##  Contribuir  
-1. Haz fork del proyecto  
-2. Crea una rama: `git checkout -b feat/nueva-funcionalidad`  
-3. Verifica pruebas y cobertura:  
-   ```bash  
-   pytest && flake8 && mypy src/  
-   ```  
-4. Abre un Pull Request detallando los cambios.  
-5. Consulta las [directrices de contribución](CONTRIBUTING.md) para más detalles.  
 
 ---
 
