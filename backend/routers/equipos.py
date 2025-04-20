@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
-# Modelo de datos
+# Modelo de datos para la API
 class Equipo(BaseModel):
     id: int
     nombre: str
-    descripcion: Optional[str] = None
+    descripcion: str
 
 # Base de datos simulada
 equipos_db: List[Equipo] = []
