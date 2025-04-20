@@ -34,13 +34,14 @@ jobs:
           pytest --cov=backend --cov-report=xml --junitxml=test-reports.xml
 
       - name: Check if Automatic Analysis is enabled
+        id: check_auto_analysis
         run: |
           curl -u "${{ secrets.SONAR_TOKEN }}:" \
           "https://sonarcloud.io/api/settings/values?component=ISCODEVUTB_ConstructionCompany" \
-          | grep -q '"sonar.core.serverBaseURL"' && exit 0 || exit 1
+          | grep -q '"sonar.core.serverBaseURL"' && echo "Automatic Analysis is enabled" && exit 0 || echo "Automatic Analysis is disabled"
 
       - name: SonarCloud Scan
-        if: success() # Solo ejecuta si el análisis automático está deshabilitado
+        if: steps.check_auto_analysis.outcome != 'success' # Solo ejecuta si el análisis automático está deshabilitado
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
