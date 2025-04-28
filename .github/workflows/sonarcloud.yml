@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Importante para analizar todo el historial
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -33,15 +35,8 @@ jobs:
         run: |
           pytest --cov=backend --cov-report=xml --junitxml=test-reports.xml
 
-      - name: Check if Automatic Analysis is enabled
-        id: check_auto_analysis
-        run: |
-          curl -u "${{ secrets.SONAR_TOKEN }}:" \
-          "https://sonarcloud.io/api/settings/values?component=ISCODEVUTB_ConstructionCompany" \
-          | grep -q '"sonar.core.serverBaseURL"' && echo "Automatic Analysis is enabled" && exit 0 || echo "Automatic Analysis is disabled"
-
       - name: SonarCloud Scan
-        if: steps.check_auto_analysis.outcome != 'success' # Solo ejecuta si el análisis automático está deshabilitado
         uses: SonarSource/sonarcloud-github-action@v2
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Necesario para PRs y comentarios
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
