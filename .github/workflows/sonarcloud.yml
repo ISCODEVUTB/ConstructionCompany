@@ -36,5 +36,5 @@ jobs:
           args: >
             -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
             -Dsonar.organization=deviscoutb
-            -Dsonar.python.version=3.9  # Si es proyecto Python
-            -X  # Modo debug
+            -Dsonar.python.version=3.9
+            -X
