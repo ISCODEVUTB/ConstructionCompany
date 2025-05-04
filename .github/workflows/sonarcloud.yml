@@ -35,3 +35,4 @@ jobs:
             -Dsonar.organization=deviscoutb
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          INPUT_ARGS: "-Dsonar.projectKey=ISCODEVUTB_ConstructionCompany -Dsonar.organization=deviscoutb"
