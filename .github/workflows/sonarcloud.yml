@@ -1,43 +1,37 @@
-name: SonarCloud Analysis
-
+name: SonarCloud
 on:
   push:
     branches:
       - main
+      - develop
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
-    name: SonarCloud Scan
+  build:
+    name: Build and analyze on SonarCloud
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          # Disabling shallow clone is recommended for better relevancy of analysis
-          fetch-depth: 0
+          java-version: '17'
+          distribution: 'temurin'
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
         with:
-          python-version: 3.12.0
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pytest pytest-cov
-
-      - name: Run tests with coverage
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-        run: |
-          pytest --cov=backend --cov-report=xml --junitxml=test-reports.xml
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
+            -Dsonar.organization=deviscoutb
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Generate a token on SonarCloud.io
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
