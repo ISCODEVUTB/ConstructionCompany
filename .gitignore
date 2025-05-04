@@ -1,0 +1,17 @@
+# Ignorar entornos virtuales
+venv/
+.env
+
+# Ignorar archivos de configuración sensibles
+*.env
+
+# Ignorar archivos de compilación
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar logs
+*.log
+
+# Ignorar dependencias instaladas
+node_modules/
