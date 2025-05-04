@@ -36,7 +36,7 @@ jobs:
       run: |
         pytest tests/ \
           --cov=src \
-          --cov-report=xml  # Cambiado de 'val' a 'xml'
+          --cov-report=xml
       env:
         PYTHONPATH: ${{ github.workspace }}
 
