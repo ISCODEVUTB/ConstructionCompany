@@ -40,15 +40,20 @@ jobs:
           coverage xml -o coverage.xml
 
       # 5. Preparar los datos de cobertura de pruebas
-      # Si los archivos de cobertura tienen rutas incorrectas, puedes ajustarlas con un script 'sed'
+      # 5.1 Ajustar rutas en el archivo coverage.xml
       - name: Fix Coverage File Paths
         run: |
           sed -i 's|/workspaces/ConstructionCompany/|/github/workspace/|g' coverage.xml
 
-      # 5.1 Convert coverage.xml to Cobertura v1
+      # 5.2 Convertir coverage.xml a Cobertura v1
       - name: Convert coverage.xml to Cobertura v1
         run: |
           sed -i 's/version="7.8.0"/version="1"/' coverage.xml
+
+      # 5.3 Eliminar el nodo <sources> del archivo coverage.xml
+      - name: Remove <sources> node from coverage.xml
+        run: |
+          sed -i '/<sources>/,/<\/sources>/d' coverage.xml
 
       # 6. Ejecutar análisis de SonarCloud
       - name: SonarCloud Scan
