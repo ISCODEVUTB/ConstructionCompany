@@ -34,20 +34,28 @@ jobs:
         echo "Estructura del proyecto:"
         ls -R src/backend/app || echo "El directorio src/backend/app no existe"
 
-    # 4. Verificar permisos de archivos
+    # 4. Verificar contexto de ejecución
+    - name: Verificar contexto de ejecución
+      run: |
+        echo "Directorio actual:"
+        pwd
+        echo "Archivos en el directorio actual:"
+        ls -R
+
+    # 5. Verificar permisos de archivos
     - name: Verificar permisos de archivos
       run: |
         echo "Permisos de archivos en src/backend/app:"
         ls -lR src/backend/app
 
-    # 5. Instalar dependencias
+    # 6. Instalar dependencias
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pytest pytest-cov
         [ -f requirements.txt ] && pip install -r requirements.txt
 
-    # 6. Ejecutar pruebas
+    # 7. Ejecutar pruebas
     - name: Run tests
       run: |
         cd src/backend/app
@@ -56,7 +64,7 @@ jobs:
           --cov-report=xml:../../../coverage.xml \
           --junitxml=../../../test-results.xml
 
-    # 7. Análisis SonarCloud
+    # 8. Análisis SonarCloud
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       env:
@@ -67,7 +75,7 @@ jobs:
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
           -Dsonar.python.version=3.12
-          -Dsonar.sources=./src/backend/app
+          -Dsonar.sources=/github/workspace/src/backend/app
           -Dsonar.tests=./src/backend/app/tests
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
