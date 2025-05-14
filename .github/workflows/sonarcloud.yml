@@ -35,7 +35,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4. Análisis SonarCloud sin tests
+      # ... (los primeros pasos igual que arriba)
+
+      # 4. Ejecutar pruebas básicas
+      - name: Ejecutar pruebas
+        run: |
+          pytest --cov=backend --cov-report=xml:coverage.xml --junitxml=test-reports.xml backend/test/
+
+      # 5. Análisis SonarCloud
       - name: Escaneo SonarCloud
         uses: SonarSource/sonarcloud-github-action@v2
         env:
@@ -47,5 +54,7 @@ jobs:
             -Dsonar.organization=deviscoutb
             -Dsonar.python.version=3.12
             -Dsonar.sources=backend
+            -Dsonar.tests=backend/test
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.python.xunit.reportPath=test-reports.xml
             -Dsonar.exclusions=venv/**,**/__pycache__/**
-            -Dsonar.scanner.mode=preview
