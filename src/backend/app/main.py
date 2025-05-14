@@ -3,7 +3,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
 from uuid import uuid4
-from app.main import app
 
 app = FastAPI(title="Construction Company API")
 
