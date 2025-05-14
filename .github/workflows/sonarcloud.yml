@@ -64,7 +64,11 @@ jobs:
           --cov-report=xml:../../../coverage.xml \
           --junitxml=../../../test-results.xml
 
-    # 8. Análisis SonarCloud
+    # 8. Verificar estructura antes del análisis SonarCloud
+    - name: Estructura antes del análisis SonarCloud
+      run: ls -R
+
+    # 9. Análisis SonarCloud
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       env:
