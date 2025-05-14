@@ -2,7 +2,7 @@
 
 **Sistema integral para optimizar la gestión de proyectos, recursos y costos en empresas de construcción.**  
 
----
+--
 
 ##  Características Principales  
 **Gestión Centralizada**:  
