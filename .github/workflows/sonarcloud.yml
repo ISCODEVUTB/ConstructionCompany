@@ -93,7 +93,11 @@ jobs:
         args: >
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
-          -Dsonar.sources=.
+          -Dsonar.sources=src/backend/app
+          -Dsonar.tests=src/backend/app/tests
+          -Dsonar.inclusions=src/backend/app/tests/**,src/backend/app/tests/test_basico.py
+          -Dsonar.test.inclusions=src/backend/app/tests/**
+          -Dsonar.language=py
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
           -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/*.md,**/*.json,**/*.xml
