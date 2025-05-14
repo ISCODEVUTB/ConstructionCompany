@@ -8,49 +8,61 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
-    name: Build and analyze on SonarCloud
+  analyze:
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # Required for SonarCloud analysis
+      checks: write  # Needed for PR decoration
 
     steps:
-      # 1. Checkout del código (con historial completo)
+      # 1. Checkout code (full history)
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Necesario para el análisis de SonarCloud
+          fetch-depth: 0
 
-      # 2. Configurar Python
-      - name: Set up Python
+      # 2. Setup Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
           python-version: '3.12.0'
 
-      # 3. Instalar dependencias
+      # 3. Cache dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # 4. Install dependencies
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov
+          pip install pytest-cov==6.1.1
 
-      # 4. Ejecutar pruebas con cobertura
+      # 5. Run tests with coverage
       - name: Run tests with coverage
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: |
-          coverage run --source=backend -m pytest tests --junitxml=test-reports.xml
-          coverage xml -o coverage.xml
+          pytest --cov=backend --cov-report=xml:coverage.xml --junitxml=test-reports.xml tests/
 
-      # 5. Ajustar rutas en coverage.xml (solo si es necesario)
-      - name: Fix Coverage File Paths
+      # 6. Fix coverage paths
+      - name: Fix coverage paths
         run: |
-          # Reemplaza la ruta base del workspace de GitHub
           sed -i "s|$(pwd)|/github/workspace|g" coverage.xml
 
-      # 6. Análisis con SonarCloud
+      # 7. SonarCloud Scan
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatic
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Must be configured in repo secrets
         with:
           args: >
             -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
@@ -58,7 +70,8 @@ jobs:
             -Dsonar.python.version=3.12
             -Dsonar.sources=backend
             -Dsonar.tests=tests
-            -Dsonar.coverageReportPaths=coverage.xml
-            -Dsonar.junit.reportPaths=test-reports.xml
-            -Dsonar.exclusions=venv/**,tests/**
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.python.xunit.reportPath=test-reports.xml
+            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**
             -Dsonar.cpd.exclusions=**/tests/**
+            -Dsonar.verbose=true
