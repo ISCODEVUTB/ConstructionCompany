@@ -28,13 +28,11 @@ jobs:
       with:
         python-version: "3.12"
 
-    # 3. Verificar estructura
-    - name: Verify project structure
+    # 3. Verificar estructura del proyecto
+    - name: Verificar estructura del proyecto
       run: |
         echo "Estructura del proyecto:"
-        ls -R src/backend/app || echo "No existe src/backend/app"
-        echo "Contenido de tests:"
-        ls -la src/backend/app/tests || echo "No existe directorio tests"
+        ls -R src/backend/app || echo "El directorio src/backend/app no existe"
 
     # 4. Instalar dependencias
     - name: Install dependencies
@@ -63,8 +61,8 @@ jobs:
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
           -Dsonar.python.version=3.12
-          -Dsonar.sources=src/backend/app
-          -Dsonar.tests=src/backend/app/tests
+          -Dsonar.sources=./src/backend/app
+          -Dsonar.tests=./src/backend/app/tests
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
           -Dsonar.exclusions=src/frontend/**,**/__pycache__/**,**/*.md,**/*.json,**/*.dart
