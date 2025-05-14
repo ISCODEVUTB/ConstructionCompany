@@ -63,7 +63,7 @@ jobs:
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
           -Dsonar.python.version=3.12
-          -Dsonar.sources=src/backend
+          -Dsonar.sources=src/backend/app
           -Dsonar.tests=src/backend/app/tests
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
