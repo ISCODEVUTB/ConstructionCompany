@@ -19,7 +19,7 @@
 **Plataforma en la Nube**:  
    - Acceso multiplataforma (web, móvil) con sincronización en tiempo real.  
 
----
+----
 
 ##  Comenzar  
 
