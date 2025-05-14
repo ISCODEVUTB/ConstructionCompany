@@ -64,11 +64,7 @@ jobs:
           --cov-report=xml:../../../coverage.xml \
           --junitxml=../../../test-results.xml
 
-    # 8. Verificar estructura antes del análisis SonarCloud
-    - name: Estructura antes del análisis SonarCloud
-      run: ls -R
-
-    # 9. Análisis SonarCloud
+    # 8. Análisis SonarCloud
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       env:
@@ -78,10 +74,11 @@ jobs:
         args: >
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
+          -Dsonar.python.version=3.12
           -Dsonar.sources=src/backend/app
           -Dsonar.tests=src/backend/app/tests
-          -Dsonar.python.version=3.12
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
+          -Dsonar.exclusions=src/backend/app/tests/**,src/frontend/**,**/__pycache__/**,**/*.md,**/*.json,**/*.dart
+          -Dsonar.working.directory=.
           -Dsonar.verbose=true
-
