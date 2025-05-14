@@ -63,7 +63,7 @@ jobs:
             -Dsonar.organization=deviscoutb
             -Dsonar.python.version=3.12
             -Dsonar.sources=src/backend/app
-            -Dsonar.tests=src/backend/app/test
+            -Dsonar.tests=src/backend/app/tests
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.python.xunit.reportPath=test-reports.xml
             -Dsonar.exclusions=venv/**,**/__pycache__/**,coverage/**,docs/**
