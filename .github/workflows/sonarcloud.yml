@@ -1,15 +1,16 @@
-name: Análisis SonarCloud
+name: SonarCloud Analysis
 
 on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  analizar:
-    name: Análisis con SonarCloud
+  analyze:
+    name: Analyze with SonarCloud
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,44 +18,44 @@ jobs:
       checks: write
 
     steps:
-      # 1. Obtener el código
-      - name: Obtener código
+      # 1. Checkout del código
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       # 2. Configurar Python
-      - name: Configurar Python 3.12
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.0'
+          python-version: '3.12'
 
       # 3. Instalar dependencias
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest pytest-cov
 
-      # ... (los primeros pasos igual que arriba)
-
-      # 4. Ejecutar pruebas básicas
-      - name: Ejecutar pruebas
+      # 4. Verificar estructura
+      - name: Verify project structure
         run: |
-          pytest --cov=backend --cov-report=xml:coverage.xml --junitxml=test-reports.xml backend/test/
+          echo "Estructura del proyecto:"
+          ls -R
+          echo "Test directory exists: $(if [ -d 'src/backend/app/test' ]; then echo 'Yes'; else echo 'No'; fi)"
 
-      # 5. Análisis SonarCloud
-      - name: Escaneo SonarCloud
+      # 5. Ejecutar pruebas
+      - name: Run tests
+        run: |
+          cd src/backend/app
+          pytest --cov=. --cov-report=xml:../../../coverage.xml --junitxml=../../../test-reports.xml test/
+
+      # 6. Análisis SonarCloud
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
-            -Dsonar.organization=deviscoutb
-            -Dsonar.python.version=3.12
-            -Dsonar.sources=backend
-            -Dsonar.tests=backend/test
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.python.xunit.reportPath=test-reports.xml
-            -Dsonar.exclusions=venv/**,**/__pycache__/**
+            -Dsonar.projectKey=ISCODEV
