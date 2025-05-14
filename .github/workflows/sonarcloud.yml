@@ -22,20 +22,19 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 2. Verificar estructura del proyecto
-    - name: Verify project structure
-      id: verify-structure
-      run: |
-        echo "Estructura del proyecto:"
-        ls -R
-        echo "¿Existe src/backend/app? $(if [ -d 'src/backend/app' ]; then echo 'Sí'; else echo 'No'; fi)"
-        echo "¿Existe src/backend/app/tests? $(if [ -d 'src/backend/app/tests' ]; then echo 'Sí'; else echo 'No'; fi)"
-
-    # 3. Configurar Python
+    # 2. Configurar Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.12"
+
+    # 3. Verificar estructura
+    - name: Verify project structure
+      run: |
+        echo "Estructura del proyecto:"
+        ls -R src/backend/app || echo "No existe src/backend/app"
+        echo "Contenido de tests:"
+        ls -la src/backend/app/tests || echo "No existe directorio tests"
 
     # 4. Instalar dependencias
     - name: Install dependencies
@@ -44,36 +43,14 @@ jobs:
         pip install pytest pytest-cov
         [ -f requirements.txt ] && pip install -r requirements.txt
 
-    # 5. Crear estructura básica si no existe
-    - name: Create basic structure if missing
-      if: ${{ !contains(steps.verify-structure.outputs.src_dir, 'Sí') }}
-      run: |
-        mkdir -p src/backend/app
-        touch src/backend/app/__init__.py
-        echo "# Placeholder" > src/backend/app/main.py
-        mkdir -p src/backend/app/tests
-        touch src/backend/app/tests/__init__.py
-        echo "def test_example():\n    assert True" > src/backend/app/tests/test_example.py
-
     # 6. Ejecutar pruebas
     - name: Run tests
       run: |
-        if [ -d "src/backend/app" ]; then
-          cd src/backend/app
-          PYTHONPATH=$PYTHONPATH:$(pwd)/../.. pytest tests/ \
-            --cov=. \
-            --cov-report=xml:../../../coverage.xml \
-            --junitxml=../../../test-results.xml
-        else
-          echo "No se encontró src/backend/app - creando estructura básica"
-          mkdir -p src/backend/app/tests
-          touch src/backend/app/tests/__init__.py
-          echo "def test_example():\n    assert True" > src/backend/app/tests/test_example.py
-          pytest src/backend/app/tests/ \
-            --cov=src/backend/app \
-            --cov-report=xml:coverage.xml \
-            --junitxml=test-results.xml
-        fi
+        cd src/backend/app
+        PYTHONPATH=$PYTHONPATH:$(pwd)/../.. pytest tests/ \
+          --cov=. \
+          --cov-report=xml:../../../coverage.xml \
+          --junitxml=../../../test-results.xml
 
     # 7. Análisis SonarCloud
     - name: SonarCloud Scan
@@ -86,10 +63,10 @@ jobs:
           -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
           -Dsonar.organization=deviscoutb
           -Dsonar.python.version=3.12
-          -Dsonar.sources=.
-          -Dsonar.tests=.
+          -Dsonar.sources=src/backend/app
+          -Dsonar.tests=src/backend/app/tests
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
-          -Dsonar.exclusions=venv/**,**/__pycache__/**,coverage/**,docs/**
+          -Dsonar.exclusions=venv/**,**/__pycache__/**
           -Dsonar.working.directory=.
           -Dsonar.verbose=true
