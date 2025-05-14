@@ -82,3 +82,4 @@ jobs:
           -Dsonar.exclusions=src/backend/app/tests/**,src/frontend/**,**/__pycache__/**,**/*.md,**/*.json,**/*.dart
           -Dsonar.working.directory=.
           -Dsonar.verbose=true
+          -X
