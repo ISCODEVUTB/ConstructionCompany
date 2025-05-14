@@ -70,21 +70,19 @@ jobs:
 
     # 9. Análisis SonarCloud
     - name: SonarCloud Scan
-      run: |
-        echo "Ubicación actual: $(pwd)"
-        echo "Contenido de src/backend/app:"
-        ls -la src/backend/app || echo "No existe src/backend/app"
-        sonar-scanner \
-          -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany \
-          -Dsonar.organization=deviscoutb \
-          -Dsonar.python.version=3.12 \
-          -Dsonar.sources=src/backend/app \
-          -Dsonar.tests=src/backend/app/tests \
-          -Dsonar.python.coverage.reportPaths=coverage.xml \
-          -Dsonar.python.xunit.reportPath=test-results.xml \
-          -Dsonar.exclusions=src/frontend/**,**/__pycache__/**,**/*.md,**/*.json,**/*.dart \
-          -Dsonar.projectBaseDir=$(pwd) \
-          -Dsonar.verbose=true
+      uses: SonarSource/sonarcloud-github-action@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
+          -Dsonar.organization=deviscoutb
+          -Dsonar.sources=src/backend/app
+          -Dsonar.tests=src/backend/app/tests
+          -Dsonar.python.version=3.12
+          -Dsonar.python.coverage.reportPaths=coverage.xml
+          -Dsonar.python.xunit.reportPath=test-results.xml
+          -Dsonar.projectBaseDir=/home/runner/work/ConstructionCompany/ConstructionCompany
+          -Dsonar.verbose=true
+
