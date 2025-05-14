@@ -49,7 +49,7 @@ jobs:
       - name: Run tests
         run: |
           cd src/backend/app
-          PYTHONPATH=$PYTHONPATH:$(pwd)/../.. pytest --cov=. --cov-report=xml:../../../coverage.xml --junitxml=../../../test-reports.xml test/
+          PYTHONPATH=$PYTHONPATH:$(pwd)/../.. pytest --cov=. --cov-report=xml:../../../coverage.xml --junitxml=../../../test-reports.xml tests/
 
       # 6. Análisis SonarCloud
       - name: SonarCloud Scan
