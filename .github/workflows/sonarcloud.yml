@@ -83,6 +83,5 @@ jobs:
           -Dsonar.python.version=3.12
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.python.xunit.reportPath=test-results.xml
-          -Dsonar.projectBaseDir=/home/runner/work/ConstructionCompany/ConstructionCompany
           -Dsonar.verbose=true
 
