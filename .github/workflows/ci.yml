@@ -26,11 +26,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
     - name: Run tests
       run: pytest src/backend/app/tests/
 
     - name: Verify Swagger documentation
       run: |
-        nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+        nohup python -m uvicorn src.backend.app.main:app --host 0.0.0.0 --port 8000 &
         sleep 5  # Espera a que el servidor se inicie
         curl -f http://127.0.0.1:8000/docs
