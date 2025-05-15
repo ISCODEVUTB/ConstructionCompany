@@ -12,6 +12,9 @@ app = FastAPI(
     redoc_url="/redoc"  # URL para Redoc
 )
 
+@app.get("/")
+def read_root():
+    return {"mensaje": "Bienvenido a la API"}
 # ---------------------
 # MODELOS SIMPLES
 # ---------------------
