@@ -1,4 +1,8 @@
 # Simula cálculo de presupuesto total
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
 
 def calcular_presupuesto(materiales, mano_obra):
     return sum(materiales) + mano_obra

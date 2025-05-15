@@ -8,6 +8,9 @@ def test_flujo_completo_cotizacion():
     response = client.post("/clientes/", json=cliente)
     assert response.status_code == 201
 
-    cotizacion = {"cliente_id": 1, "total": 5000}
+    cotizacion = {"cliente_id": "1", "total": 5000}
     response = client.post("/cotizaciones/", json=cotizacion)
     assert response.status_code == 201
+    data = response.json()
+    assert data["cliente_id"] == "1"
+    assert data["total"] == 5000

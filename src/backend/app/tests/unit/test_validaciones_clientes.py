@@ -1,6 +1,9 @@
 # Validación simple del RUT o cédula
-
+from fastapi.testclient import TestClient
+from app.main import app
 import re
+client = TestClient(app)
+
 
 def validar_documento(doc):
     return re.match(r"^\d{6,10}$", doc)
