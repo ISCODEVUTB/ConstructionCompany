@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 from uuid import uuid4
-from api.models.cotizacion import Cotizacion
+from backend.app.api.models.cotizacion import Cotizacion
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.endpoints import equipos, proyectos, cotizaciones, auth
+from backend.app.api.endpoints import equipos, proyectos, cotizaciones, auth
 
 app = FastAPI(
     title="API de Construcción",
@@ -8,6 +8,11 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+# Endpoint raíz
+@app.get("/", summary="Página de bienvenida", description="Devuelve un mensaje de bienvenida.")
+def read_root():
+    return {"mensaje": "Bienvenido a la API de Construcción"}
 
 # Montar los routers
 app.include_router(equipos.router, prefix="/equipos", tags=["Equipos"])

@@ -1,7 +1,8 @@
 # filepath: /workspaces/ConstructionCompany/src/backend/app/api/models/proyecto.py
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from api.models.equipo import Equipo
+from backend.app.api.models.equipo import Equipo
+
 
 class Proyecto(BaseModel):
     id: Optional[str] = Field(None, description="ID único del proyecto")

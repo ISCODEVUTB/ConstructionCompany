@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from api.models.auth import LoginRequest
+from backend.app.api.models.auth import LoginRequest
 
 router = APIRouter()
 

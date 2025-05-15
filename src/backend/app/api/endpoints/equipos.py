@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from api.models.equipo import Equipo
+from backend.app.api.models.equipo import Equipo
 from typing import List
 from uuid import uuid4
 
