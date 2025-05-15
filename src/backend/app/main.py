@@ -4,7 +4,13 @@ from pydantic import BaseModel
 from typing import List, Optional
 from uuid import uuid4
 
-app = FastAPI(title="Construction Company API")
+app = FastAPI(
+    title="API de Construcción",
+    description="Documentación de la API para la gestión de proyectos y equipos.",
+    version="1.0.0",
+    docs_url="/docs",  # URL para Swagger
+    redoc_url="/redoc"  # URL para Redoc
+)
 
 # ---------------------
 # MODELOS SIMPLES
