@@ -1,6 +1,6 @@
 from http import client
 from fastapi import FastAPI, HTTPException, Header
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from uuid import uuid4
 
@@ -8,55 +8,54 @@ app = FastAPI(
     title="API de Construcción",
     description="Documentación de la API para la gestión de proyectos y equipos.",
     version="1.0.0",
-    docs_url="/docs",  # URL para Swagger
-    redoc_url="/redoc"  # URL para Redoc
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_version="3.0.0"  # Correcta para compatibilidad OpenAPI 3.0.x
 )
 
 @app.get("/")
 def read_root():
     return {"mensaje": "Bienvenido a la API"}
+
 # ---------------------
 # MODELOS SIMPLES
 # ---------------------
 
 class Equipo(BaseModel):
-    id: Optional[str] = None
-    nombre: str
-    estado: str
-    ubicacion: str
-    materiales: List[str] = []  # Lista de materiales asociados al equipo
-    proyectos: List[str] = []  # Lista de IDs de proyectos asociados al equipo
-    fecha_asignacion: Optional[str] = None  # Fecha de asignación del equipo a un proyecto
-    fecha_desasignacion: Optional[str] = None  # Fecha de desasignación del equipo de un proyecto
-
-
+    id: Optional[str] = Field(None, description="ID único del equipo")
+    nombre: str = Field(..., description="Nombre del equipo")
+    estado: str = Field(..., description="Estado actual del equipo (activo/inactivo)")
+    ubicacion: str = Field(..., description="Ubicación del equipo")
+    materiales: List[str] = Field(default_factory=list, description="Lista de materiales asociados al equipo")
+    proyectos: List[str] = Field(default_factory=list, description="Lista de IDs de proyectos asociados al equipo")
+    fecha_asignacion: Optional[str] = Field(None, description="Fecha de asignación del equipo a un proyecto")
+    fecha_desasignacion: Optional[str] = Field(None, description="Fecha de desasignación del equipo de un proyecto")
 
 class Proyecto(BaseModel):
-    id: Optional[str] = None
-    nombre: str
-    descripcion: str
-    estado: str
-    fecha_inicio: str
-    fecha_fin: Optional[str] = None
-    materiales: List[str] = []
-    equipos: List[Equipo] = []
-
+    id: Optional[str] = Field(None, description="ID único del proyecto")
+    nombre: str = Field(..., description="Nombre del proyecto")
+    descripcion: str = Field(..., description="Descripción del proyecto")
+    estado: str = Field(..., description="Estado actual del proyecto")
+    fecha_inicio: str = Field(..., description="Fecha de inicio del proyecto")
+    fecha_fin: Optional[str] = Field(None, description="Fecha de finalización del proyecto")
+    materiales: List[str] = Field(default_factory=list, description="Lista de materiales asociados al proyecto")
+    equipos: List[Equipo] = Field(default_factory=list, description="Lista de equipos asignados al proyecto")
 
 class LoginRequest(BaseModel):
     usuario: str
     password: str
 
-
 class Cotizacion(BaseModel):
-    id: Optional[str] = None
-    cliente_id: str
-    total: float
+    id: Optional[str] = Field(None, description="ID único de la cotización")
+    cliente_id: str = Field(..., description="ID del cliente asociado a la cotización")
+    total: float = Field(..., description="Monto total de la cotización")
 
-
-# En memoria (por simplicidad)
+# ---------------------
+# BASES DE DATOS EN MEMORIA
+# ---------------------
 equipos_db: List[Equipo] = []
 proyectos_db: List[Proyecto] = []
-cotizaciones_db = []
+cotizaciones_db: List[Cotizacion] = []
 
 # ---------------------
 # ENDPOINTS CRUD
@@ -101,8 +100,8 @@ def eliminar_equipo(equipo_id: str):
 
 @app.post("/proyectos", status_code=201, response_model=Proyecto)
 def crear_proyecto(proyecto: Proyecto):
-    proyecto.id = str(uuid4())  # Genera un ID único.
-    proyectos_db.append(proyecto)  # Agrega el proyecto a la base de datos.
+    proyecto.id = str(uuid4())
+    proyectos_db.append(proyecto)
     return proyecto
 
 @app.get("/proyectos", response_model=List[Proyecto])
@@ -167,4 +166,3 @@ def dashboard(authorization: str = Header(None)):
     if authorization != "Bearer token_valido":
         raise HTTPException(status_code=401, detail="No autorizado")
     return {"mensaje": "Bienvenido al dashboard"}
-
