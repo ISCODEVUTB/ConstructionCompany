@@ -1,6 +1,6 @@
 # Validación simple del RUT o cédula
 from fastapi.testclient import TestClient
-from app.main import app
+from app.api.main import app
 import re
 client = TestClient(app)
 
