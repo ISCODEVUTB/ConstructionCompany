@@ -10,10 +10,10 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_version="3.0.0"  # Correcta para compatibilidad OpenAPI 3.0.x
+    openapi_version="3.1.0"  # Usamos OpenAPI 3.1.0 por compatibilidad con Pydantic v2
 )
 
-@app.get("/")
+@app.get("/", summary="Página de bienvenida", description="Devuelve un mensaje de bienvenida.")
 def read_root():
     return {"mensaje": "Bienvenido a la API"}
 
@@ -63,26 +63,26 @@ cotizaciones_db: List[Cotizacion] = []
 
 EQUIPO_NO_ENCONTRADO = "Equipo no encontrado"
 
-@app.post("/registro-equipos/equipos", status_code=201)
+@app.post("/registro-equipos/equipos", status_code=201, summary="Crear equipo", description="Crea un nuevo equipo y lo agrega a la base de datos.")
 def crear_equipo(equipo: Equipo):
     equipo.id = str(uuid4())
     equipos_db.append(equipo)
     return equipo
 
-@app.get("/registro-equipos/equipos", response_model=List[Equipo])
+@app.get("/registro-equipos/equipos", response_model=List[Equipo], summary="Listar equipos", description="Devuelve una lista de todos los equipos registrados.")
 def listar_equipos(authorization: str = Header(None)):
     if authorization != "Bearer token_valido":
         raise HTTPException(status_code=401, detail="No autorizado")
     return equipos_db
 
-@app.get("/registro-equipos/equipos/{equipo_id}", response_model=Equipo)
+@app.get("/registro-equipos/equipos/{equipo_id}", response_model=Equipo, summary="Obtener equipo", description="Obtiene un equipo por su ID.")
 def obtener_equipo(equipo_id: str):
     for eq in equipos_db:
         if eq.id == equipo_id:
             return eq
     raise HTTPException(status_code=404, detail=EQUIPO_NO_ENCONTRADO)
 
-@app.put("/registro-equipos/equipos/{equipo_id}", response_model=Equipo)
+@app.put("/registro-equipos/equipos/{equipo_id}", response_model=Equipo, summary="Actualizar equipo", description="Actualiza los datos de un equipo existente.")
 def actualizar_equipo(equipo_id: str, datos: Equipo):
     for i, eq in enumerate(equipos_db):
         if eq.id == equipo_id:
@@ -90,7 +90,7 @@ def actualizar_equipo(equipo_id: str, datos: Equipo):
             return equipos_db[i]
     raise HTTPException(status_code=404, detail=EQUIPO_NO_ENCONTRADO)
 
-@app.delete("/registro-equipos/equipos/{equipo_id}", status_code=204)
+@app.delete("/registro-equipos/equipos/{equipo_id}", status_code=204, summary="Eliminar equipo", description="Elimina un equipo por su ID.")
 def eliminar_equipo(equipo_id: str):
     for i, eq in enumerate(equipos_db):
         if eq.id == equipo_id:
@@ -98,24 +98,24 @@ def eliminar_equipo(equipo_id: str):
             return
     raise HTTPException(status_code=404, detail=EQUIPO_NO_ENCONTRADO)
 
-@app.post("/proyectos", status_code=201, response_model=Proyecto)
+@app.post("/proyectos", status_code=201, response_model=Proyecto, summary="Crear proyecto", description="Crea un nuevo proyecto y lo agrega a la base de datos.")
 def crear_proyecto(proyecto: Proyecto):
     proyecto.id = str(uuid4())
     proyectos_db.append(proyecto)
     return proyecto
 
-@app.get("/proyectos", response_model=List[Proyecto])
+@app.get("/proyectos", response_model=List[Proyecto], summary="Listar proyectos", description="Devuelve una lista de todos los proyectos registrados.")
 def listar_proyectos():
     return proyectos_db
 
-@app.get("/proyectos/{proyecto_id}", response_model=Proyecto)
+@app.get("/proyectos/{proyecto_id}", response_model=Proyecto, summary="Obtener proyecto", description="Obtiene un proyecto por su ID.")
 def obtener_proyecto(proyecto_id: str):
     for proyecto in proyectos_db:
         if proyecto.id == proyecto_id:
             return proyecto
     raise HTTPException(status_code=404, detail="Proyecto no encontrado")
 
-@app.put("/proyectos/{proyecto_id}", response_model=Proyecto)
+@app.put("/proyectos/{proyecto_id}", response_model=Proyecto, summary="Actualizar proyecto", description="Actualiza los datos de un proyecto existente.")
 def actualizar_proyecto(proyecto_id: str, datos: Proyecto):
     for i, proyecto in enumerate(proyectos_db):
         if proyecto.id == proyecto_id:
@@ -123,7 +123,7 @@ def actualizar_proyecto(proyecto_id: str, datos: Proyecto):
             return proyectos_db[i]
     raise HTTPException(status_code=404, detail="Proyecto no encontrado")
 
-@app.delete("/proyectos/{proyecto_id}", status_code=204)
+@app.delete("/proyectos/{proyecto_id}", status_code=204, summary="Eliminar proyecto", description="Elimina un proyecto por su ID.")
 def eliminar_proyecto(proyecto_id: str):
     for i, proyecto in enumerate(proyectos_db):
         if proyecto.id == proyecto_id:
@@ -131,37 +131,37 @@ def eliminar_proyecto(proyecto_id: str):
             return
     raise HTTPException(status_code=404, detail="Proyecto no encontrado")
 
-@app.post("/login")
+@app.post("/login", summary="Iniciar sesión", description="Permite a un usuario iniciar sesión con credenciales.")
 def login(request: LoginRequest):
     if request.usuario == "admin" and request.password == "1234":
         return {"mensaje": "Inicio de sesión exitoso", "access_token": "token_valido"}
     raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
-@app.post("/clientes/", status_code=201)
+@app.post("/clientes/", status_code=201, summary="Crear cliente", description="Crea un nuevo cliente con datos libres.")
 def crear_cliente(cliente: dict):
     cliente["id"] = str(uuid4())
     return cliente
 
-@app.post("/inventarios/registro")
+@app.post("/inventarios/registro", summary="Registrar inventario", description="Registra un nuevo inventario, validando si hay materiales repetidos.")
 def registrar_inventario(data: dict):
     materiales_repetidos = [m for m in data["materiales"] if data["materiales"].count(m) > 1]
     if materiales_repetidos:
         return {"mensaje": "Material repetido detectado", "materiales_repetidos": materiales_repetidos}
     return {"mensaje": "Registro exitoso"}
 
-@app.post("/cotizaciones/", status_code=201)
+@app.post("/cotizaciones/", status_code=201, summary="Crear cotización", description="Crea una nueva cotización con cliente y total.")
 def crear_cotizacion(cotizacion: Cotizacion):
     cotizacion.id = str(uuid4())
     cotizaciones_db.append(cotizacion)
     return cotizacion
 
-@app.get("/admin/zona-restringida")
+@app.get("/admin/zona-restringida", summary="Zona restringida", description="Endpoint protegido solo accesible con autorización válida.")
 def zona_restringida(authorization: str = Header(None)):
     if authorization != "Bearer token_valido":
         raise HTTPException(status_code=403, detail="Acceso denegado")
     return {"mensaje": "Acceso permitido"}
 
-@app.get("/dashboard")
+@app.get("/dashboard", summary="Dashboard", description="Vista general del sistema, protegida por token de acceso.")
 def dashboard(authorization: str = Header(None)):
     if authorization != "Bearer token_valido":
         raise HTTPException(status_code=401, detail="No autorizado")
