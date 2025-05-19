@@ -14,8 +14,8 @@ app = FastAPI(
 def read_root():
     return {"mensaje": "Bienvenido a la API de Construcción"}
 
-# Montar los routers
-app.include_router(equipos.router, prefix="/equipos", tags=["Equipos"])
+# Montar los routers con los prefijos que esperan tus tests
+app.include_router(equipos.router, prefix="/registro-equipos/equipos", tags=["Equipos"])
 app.include_router(proyectos.router, prefix="/proyectos", tags=["Proyectos"])
 app.include_router(cotizaciones.router, prefix="/cotizaciones", tags=["Cotizaciones"])
-app.include_router(auth.router, prefix="/auth", tags=["Autenticación"])
+app.include_router(auth.router, prefix="/login", tags=["Autenticación"])
