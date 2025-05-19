@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends, Header
 from typing import List
 from uuid import uuid4
 from backend.app.api.models.equipo import Equipo
@@ -7,13 +7,17 @@ router = APIRouter()
 
 equipos_db: List[Equipo] = []
 
+def verificar_token(authorization: str = Header(None)):
+    if authorization != "***":
+        raise HTTPException(status_code=401, detail="Token inválido")
+
 @router.post("/", response_model=Equipo, status_code=201)
 def crear_equipo(equipo: Equipo):
     equipo.id = str(uuid4())
     equipos_db.append(equipo)
     return equipo
 
-@router.get("/", response_model=List[Equipo])
+@router.get("/", response_model=List[Equipo], dependencies=[Depends(verificar_token)])
 def listar_equipos():
     return equipos_db
 

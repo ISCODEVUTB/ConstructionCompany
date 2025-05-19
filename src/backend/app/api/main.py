@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.app.api.endpoints import equipos, proyectos, cotizaciones, auth
+from backend.app.api.endpoints import equipos, proyectos, cotizaciones, auth, dashboard, clientes, admin, inventarios
 
 app = FastAPI(
     title="API de Construcción",
@@ -19,3 +19,7 @@ app.include_router(equipos.router, prefix="/registro-equipos/equipos", tags=["Eq
 app.include_router(proyectos.router, prefix="/proyectos", tags=["Proyectos"])
 app.include_router(cotizaciones.router, prefix="/cotizaciones", tags=["Cotizaciones"])
 app.include_router(auth.router, prefix="/login", tags=["Autenticación"])
+app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(clientes.router, prefix="/clientes", tags=["Clientes"])
+app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(inventarios.router, prefix="/inventarios", tags=["Inventarios"])
