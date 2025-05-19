@@ -13,4 +13,4 @@ inventarios_db: List[Inventario] = []
 @router.post("/registro")
 def registrar_inventario(data: Inventario):
     inventarios_db.append(data)
-    return {"mensaje": "Inventario registrado"}
+    return {"mensaje": "Inventario registrado", "materiales": data.materiales}

@@ -11,7 +11,7 @@ def verificar_token(authorization: str = Header(None)):
     if authorization != "***":
         raise HTTPException(status_code=401, detail="Token inválido")
 
-@router.post("/", response_model=Equipo, status_code=201)
+@router.post("/", response_model=Equipo, status_code=201, dependencies=[Depends(verificar_token)])
 def crear_equipo(equipo: Equipo):
     equipo.id = str(uuid4())
     equipos_db.append(equipo)
@@ -21,14 +21,14 @@ def crear_equipo(equipo: Equipo):
 def listar_equipos():
     return equipos_db
 
-@router.get("/{equipo_id}", response_model=Equipo)
+@router.get("/{equipo_id}", response_model=Equipo, dependencies=[Depends(verificar_token)])
 def obtener_equipo(equipo_id: str):
     for equipo in equipos_db:
         if equipo.id == equipo_id:
             return equipo
     raise HTTPException(status_code=404, detail="Equipo no encontrado")
 
-@router.put("/{equipo_id}", response_model=Equipo)
+@router.put("/{equipo_id}", response_model=Equipo, dependencies=[Depends(verificar_token)])
 def actualizar_equipo(equipo_id: str, datos: Equipo):
     for i, equipo in enumerate(equipos_db):
         if equipo.id == equipo_id:
@@ -36,7 +36,7 @@ def actualizar_equipo(equipo_id: str, datos: Equipo):
             return equipos_db[i]
     raise HTTPException(status_code=404, detail="Equipo no encontrado")
 
-@router.delete("/{equipo_id}", status_code=204)
+@router.delete("/{equipo_id}", status_code=204, dependencies=[Depends(verificar_token)])
 def eliminar_equipo(equipo_id: str):
     for i, equipo in enumerate(equipos_db):
         if equipo.id == equipo_id:
