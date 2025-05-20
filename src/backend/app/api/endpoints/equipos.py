@@ -4,7 +4,7 @@ from uuid import uuid4
 from backend.app.api.endpoints.auth import get_current_user
 from backend.app.api.models.equipo import Equipo
 
-router = APIRouter(prefix="/equipos", tags=["equipos"])
+router = APIRouter(tags=["equipos"])
 
 equipos_db: List[Equipo] = []
 
