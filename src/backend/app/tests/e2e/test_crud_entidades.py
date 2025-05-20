@@ -8,7 +8,7 @@ def test_crud_equipo():
     headers = {"Authorization": "Bearer token_valido"}
     equipo = {"nombre": "Retroexcavadora", "estado": "disponible", "ubicacion": "Zona Sur"}
 
-    r = client.post("/equipos", json=equipo, headers=headers)
+    r = client.post("/equipos/", json=equipo, headers=headers)
     assert r.status_code == 201
 
     id_equipo = r.json()["id"]

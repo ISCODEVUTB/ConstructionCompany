@@ -29,7 +29,9 @@ def obtener_proyecto(proyecto_id: str):
 def actualizar_proyecto(proyecto_id: str, datos: Proyecto):
     for i, proyecto in enumerate(proyectos_db):
         if proyecto.id == proyecto_id:
-            proyectos_db[i] = datos.model_copy(update={"id": proyecto_id})
+            # Asegura que el id no se pierda al actualizar
+            datos.id = proyecto_id
+            proyectos_db[i] = datos
             return proyectos_db[i]
     raise HTTPException(status_code=404, detail="Proyecto no encontrado")
 

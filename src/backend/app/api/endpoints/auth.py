@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from typing import Optional
 
-router = APIRouter(prefix="/auth", tags=["autenticacion"])
+router = APIRouter(tags=["autenticacion"])  # <--- Quita el prefix aquí
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
