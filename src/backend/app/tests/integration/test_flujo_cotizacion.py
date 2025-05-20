@@ -3,14 +3,26 @@ from backend.app.api.main import app
 
 client = TestClient(app)
 
-def test_flujo_completo_cotizacion():
-    cliente = {"nombre": "Constructora S.A.", "documento": "1234567890"}
-    response = client.post("/clientes/", json=cliente)
-    assert response.status_code == 201
+def obtener_token():
+    login_data = {"usuario": "admin", "password": "1234"}
+    response = client.post("/login", json=login_data)
+    assert response.status_code == 200
+    return response.json()["access_token"]
 
-    cotizacion = {"cliente_id": "1", "total": 5000}
-    response = client.post("/cotizaciones/", json=cotizacion)
+def test_flujo_completo_cotizacion():
+    token = obtener_token()
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Crear cliente
+    cliente = {"nombre": "Constructora S.A.", "documento": "1234567890"}
+    response = client.post("/clientes/", json=cliente, headers=headers)
+    assert response.status_code == 201
+    cliente_id = response.json()["id"]
+
+    # Crear cotización
+    cotizacion = {"cliente_id": str(cliente_id), "total": 5000}
+    response = client.post("/cotizaciones/", json=cotizacion, headers=headers)
     assert response.status_code == 201
     data = response.json()
-    assert data["cliente_id"] == "1"
+    assert str(data["cliente_id"]) == str(cliente_id)
     assert data["total"] == 5000

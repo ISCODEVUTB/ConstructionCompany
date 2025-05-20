@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from backend.app.api.main import app
 
 client = TestClient(app)
+headers = {"Authorization": "Bearer token_valido"}
 
 # ---------------------
 # PRUEBAS PARA EQUIPO
@@ -12,7 +13,7 @@ def test_crear_equipo():
         "nombre": "Excavadora",
         "estado": "activo",
         "ubicacion": "Zona A"
-    })
+    }, headers=headers)
     assert response.status_code == 201
     data = response.json()
     assert data["nombre"] == "Excavadora"
@@ -21,7 +22,7 @@ def test_crear_equipo():
     assert "id" in data
 
 def test_listar_equipos():
-    response = client.get("/registro-equipos/equipos", headers={"Authorization": "Bearer token_valido"})
+    response = client.get("/registro-equipos/equipos", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
@@ -32,11 +33,11 @@ def test_obtener_equipo():
         "nombre": "Bulldozer",
         "estado": "inactivo",
         "ubicacion": "Zona B"
-    })
+    }, headers=headers)
     equipo_id = response.json()["id"]
 
     # Obtener el equipo por ID
-    response = client.get(f"/registro-equipos/equipos/{equipo_id}")
+    response = client.get(f"/registro-equipos/equipos/{equipo_id}", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == equipo_id
@@ -48,7 +49,7 @@ def test_actualizar_equipo():
         "nombre": "Grua",
         "estado": "activo",
         "ubicacion": "Zona C"
-    })
+    }, headers=headers)
     equipo_id = response.json()["id"]
 
     # Actualizar el equipo
@@ -56,7 +57,7 @@ def test_actualizar_equipo():
         "nombre": "Grua Actualizada",
         "estado": "inactivo",
         "ubicacion": "Zona D"
-    })
+    }, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["nombre"] == "Grua Actualizada"
@@ -69,15 +70,15 @@ def test_eliminar_equipo():
         "nombre": "Camion",
         "estado": "activo",
         "ubicacion": "Zona E"
-    })
+    }, headers=headers)
     equipo_id = response.json()["id"]
 
     # Eliminar el equipo
-    response = client.delete(f"/registro-equipos/equipos/{equipo_id}")
+    response = client.delete(f"/registro-equipos/equipos/{equipo_id}", headers=headers)
     assert response.status_code == 204
 
     # Verificar que el equipo ya no existe
-    response = client.get(f"/registro-equipos/equipos/{equipo_id}")
+    response = client.get(f"/registro-equipos/equipos/{equipo_id}", headers=headers)
     assert response.status_code == 404
 
 # ---------------------

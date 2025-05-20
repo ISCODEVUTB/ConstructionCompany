@@ -3,7 +3,10 @@ from backend.app.api.main import app
 
 client = TestClient(app)
 
-
 def test_acceso_restringido_sin_token():
-    r = client.get("/registro-equipos/equipos")
-    assert r.status_code == 401
+    # No se incluye header Authorization
+    response = client.get("/registro-equipos/equipos")
+
+    # Se espera un 401 Unauthorized por falta de token
+    assert response.status_code == 401
+    assert "Not authenticated" in response.text or "Unauthorized" in response.text
