@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: constructioncompany
+Version: 0.1.0
+License-File: LICENSE
+Requires-Dist: fastapi==0.110.0
+Requires-Dist: uvicorn==0.23.2
+Requires-Dist: pydantic==2.5.2
+Requires-Dist: python-multipart==0.0.18
+Requires-Dist: httpx==0.27.0
+Provides-Extra: dev
+Requires-Dist: pytest==8.3.5; extra == "dev"
+Requires-Dist: pytest-cov==4.1.0; extra == "dev"
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist

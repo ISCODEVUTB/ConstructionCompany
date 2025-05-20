@@ -29,8 +29,8 @@ jobs:
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
 
-    - name: Run tests
-      run: pytest src/backend/app/tests/
+    - name: Run tests with coverage
+      run: pytest --cov=src/backend/app --cov-report=term-missing src/backend/app/tests/
 
     - name: Verify Swagger documentation
       run: |
