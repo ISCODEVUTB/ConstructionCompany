@@ -4,8 +4,8 @@ from backend.app.api.main import app
 client = TestClient(app)
 
 def obtener_token():
-    login_data = {"usuario": "admin", "password": "1234"}
-    response = client.post("/login", json=login_data)
+    login_data = {"username": "admin", "password": "1234"}
+    response = client.post("/auth/token", data=login_data)
     assert response.status_code == 200
     return response.json()["access_token"]
 

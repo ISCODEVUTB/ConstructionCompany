@@ -1,16 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
 from uuid import uuid4
-from pydantic import BaseModel
 from backend.app.api.endpoints.auth import get_current_user
+from backend.app.api.models.equipo import Equipo
 
 router = APIRouter(prefix="/equipos", tags=["equipos"])
-
-class Equipo(BaseModel):
-    id: str = None
-    nombre: str
-    estado: str
-    ubicacion: str
 
 equipos_db: List[Equipo] = []
 
