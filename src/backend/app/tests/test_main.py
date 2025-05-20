@@ -13,7 +13,7 @@ def obtener_token():
     login_data = {"username": "admin", "password": "1234"}
     try:
         # Cambia data= por json= si tu endpoint espera JSON
-        response = client.post("/auth/token", json=login_data)
+        response = client.post("/auth/token", data=login_data)
         
         # Debug: Imprime la respuesta si falla
         if response.status_code != 200:

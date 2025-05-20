@@ -8,7 +8,7 @@ router = APIRouter(tags=["equipos"])
 
 equipos_db: List[Equipo] = []
 
-@router.post("/", response_model=Equipo, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=Equipo, status_code=201)
 async def crear_equipo(equipo: Equipo, current_user: dict = Depends(get_current_user)):
     equipo.id = str(uuid4())
     equipos_db.append(equipo)
