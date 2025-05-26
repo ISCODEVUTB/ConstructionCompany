@@ -1,97 +1,54 @@
-name: SonarCloud Analysis
+name: SonarQube Analysis
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  analyze:
-    name: Analyze with SonarCloud
+  sonarqube:
+    name: SonarQube
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-      checks: write
 
     steps:
-    # 1. Checkout del código con fetch-depth: 0 para análisis completo
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Obtiene el historial completo para SonarQube
 
-    # 2. Configurar Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.12"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
 
-    # 3. Verificar estructura del proyecto antes de continuar
-    - name: Verificar estructura del proyecto
-      run: |
-        echo "Estructura del directorio de trabajo:"
-        ls -la
-        echo "Contenido de src (si existe):"
-        ls -la src || echo "El directorio src no existe"
-        echo "Creando estructura de directorios si no existe:"
-        mkdir -p src/backend/app/tests
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-cov pymongo fastapi httpx motor passlib python-jose email-validator pytest-asyncio bcrypt
 
-    # 4. Copiar archivos si la estructura no coincide
-    - name: Reorganizar estructura si es necesario
-      run: |
-        # Si los archivos están en la raíz, moverlos a la estructura esperada
-        if [ -f "main.py" ] && [ ! -f "src/backend/app/main.py" ]; then
-          echo "Moviendo archivos a la estructura esperada"
-          cp -r *.py src/backend/app/ || echo "No se encontraron archivos Python en la raíz"
-        fi
-        
-        # Verificar la estructura final
-        echo "Estructura final de src/backend/app:"
-        ls -la src/backend/app || echo "La estructura sigue sin existir"
+      - name: Run tests with coverage
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          pytest --cov=menu_service --cov=order_service --cov=payment_service --cov=Client_service --cov-report=xml
 
-    # 5. Instalar dependencias
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        fi
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml  # Guarda el reporte de cobertura como artefacto
 
-    # 6. Crear archivo __init__.py vacío si no existe
-    - name: Crear archivos __init__.py si es necesario
-      run: |
-        touch src/backend/app/__init__.py
-        touch src/backend/app/tests/__init__.py
-
-    # 7. Ejecutar pruebas con rutas relativas al directorio de trabajo
-    - name: Run tests
-      run: |
-        # Crear un test básico si no existe ninguno
-        if [ ! -f "src/backend/app/tests/test_basico.py" ]; then
-          echo "Creando test básico"
-          echo 'def test_example():
-            assert True' > src/backend/app/tests/test_basico.py
-        fi
-        
-        # Ejecutar pruebas con cobertura
-        cd ${GITHUB_WORKSPACE}
-        PYTHONPATH=${GITHUB_WORKSPACE} pytest src/backend/app/tests/ \
-          --cov=src/backend/app \
-          --cov-report=xml:coverage.xml \
-          --junitxml=test-results.xml || echo "Las pruebas fallaron pero continuamos con SonarCloud"
-
-    # 8. Análisis SonarCloud con rutas actualizadas y configuración más sencilla
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
-          -Dsonar.organization=deviscoutb
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.python.coverage.reportPaths=coverage.xml
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env: 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=ISCODEVUTB_ConstructionCompany
+            -Dsonar.organization=deviscoutb
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.python.coverage.reportPaths=coverage.xml
