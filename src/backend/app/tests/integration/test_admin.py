@@ -3,10 +3,21 @@ from src.backend.app.api.main import app
 
 client = TestClient(app)
 
-def test_usuario_sin_permiso_no_accede():
-    # Simula un token inválido (no autorizado o sin permisos)
-    headers = {"Authorization": "Bearer token_invalido"}
-    response = client.get("/admin/zona-restringida", headers=headers)
+def test_zona_restringida_sin_token():
+    response = client.get("/admin/zona-restringida")
+    assert response.status_code == 403
 
-    # Espera 403 Forbidden (token válido pero sin permisos) o 401 Unauthorized (token inválido o expirado)
-    assert response.status_code in [401, 403]
+def test_zona_restringida_token_invalido():
+    response = client.get(
+        "/admin/zona-restringida",
+        headers={"Authorization": "Bearer token_invalido"}
+    )
+    assert response.status_code == 403
+
+def test_zona_restringida_token_valido():
+    response = client.get(
+        "/admin/zona-restringida",
+        headers={"Authorization": "Bearer token_valido"}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"mensaje": "Acceso concedido a la zona restringida"}
