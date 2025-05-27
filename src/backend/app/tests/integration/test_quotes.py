@@ -9,17 +9,17 @@ def obtener_token():
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def test_flujo_completo_cotizacion():
+def test_crear_cotizacion():
     token = obtener_token()
     headers = {"Authorization": f"Bearer {token}"}
-
-    # Crear cliente
+    
+    # Primero crea un cliente
     cliente = {"nombre": "Constructora S.A.", "documento": "1234567890"}
     response = client.post("/clientes/", json=cliente, headers=headers)
     assert response.status_code == 201
     cliente_id = response.json()["id"]
 
-    # Crear cotización
+    # Ahora crea la cotización
     cotizacion = {"cliente_id": str(cliente_id), "total": 5000}
     response = client.post("/cotizaciones/", json=cotizacion, headers=headers)
     assert response.status_code == 201

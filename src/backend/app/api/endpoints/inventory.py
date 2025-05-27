@@ -1,12 +1,8 @@
 from fastapi import APIRouter
 from typing import List
-from pydantic import BaseModel
+from src.backend.app.api.models.inventory import Inventario  # Importa el modelo desde models
 
 router = APIRouter()
-
-class Inventario(BaseModel):
-    materiales: List[str]
-    proyecto_id: int
 
 inventarios_db: List[Inventario] = []
 

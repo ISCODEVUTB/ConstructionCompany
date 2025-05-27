@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 from uuid import uuid4
-from backend.app.api.models.proyecto import Proyecto
+from src.backend.app.api.models.projects import Proyecto
 
 router = APIRouter()
 

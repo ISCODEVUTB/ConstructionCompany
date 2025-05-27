@@ -1,7 +1,7 @@
 # filepath: /workspaces/ConstructionCompany/src/backend/app/api/models/proyecto.py
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from backend.app.api.models.equipo import Equipo
+from src.backend.app.api.models.teams import Equipo
 
 
 class Proyecto(BaseModel):

@@ -1,14 +1,9 @@
 from fastapi import APIRouter
-from typing import List, Optional
-from pydantic import BaseModel
+from typing import List
 from uuid import uuid4
+from src.backend.app.api.models.clients import Cliente  # Importa el modelo desde models
 
 router = APIRouter()
-
-class Cliente(BaseModel):
-    id: Optional[str] = None
-    nombre: str
-    documento: str
 
 clientes_db: List[Cliente] = []
 

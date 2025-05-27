@@ -2,5 +2,10 @@
     "sonarlint.connectedMode.project": {
         "connectionId": "deviscoutb",
         "projectKey": "ISCODEVUTB_ConstructionCompany"
-    }
+    },
+    "python.testing.pytestArgs": [
+        "src"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
