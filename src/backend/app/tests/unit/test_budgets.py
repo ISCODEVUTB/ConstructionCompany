@@ -1,4 +1,4 @@
-from backend.app.api.utils.budgets import calcular_presupuesto
+from src.backend.app.api.utils.budgets import calcular_presupuesto
 
 def test_calculo_presupuesto():
     materiales = [1000, 2500, 500]

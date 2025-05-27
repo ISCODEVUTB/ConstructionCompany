@@ -1,4 +1,4 @@
-from backend.app.api.utils.document_validation import validar_documento
+from src.backend.app.api.utils.document_validation import validar_documento
 
 def test_validar_documento_valido():
     assert validar_documento("1023456789")

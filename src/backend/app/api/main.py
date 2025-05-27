@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-from backend.app.api.endpoints import auth, dashboard, admin
-from src.backend.app.api.endpoints import clients, inventory, projects, quotes, teams
+from src.backend.app.api.endpoints import auth, dashboard, admin, clients, inventory, projects, quotes, teams
 
 app = FastAPI(
     title="API de Construcción",

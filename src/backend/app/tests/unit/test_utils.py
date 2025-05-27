@@ -1,5 +1,5 @@
 from datetime import datetime
-from backend.app.api.utils.utils import formatear_fecha
+from src.backend.app.api.utils.utils import formatear_fecha
 
 def test_formatear_fecha():
     fecha = datetime(2025, 5, 14)
