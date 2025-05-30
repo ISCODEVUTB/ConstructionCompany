@@ -33,12 +33,12 @@ class LoginPage extends StatelessWidget {
           // Background image with dark overlay
           SizedBox.expand(
             child: Image.asset(
-              'assets/bg.jpg', // Asegúrate de tener esta imagen en assets y declarada en pubspec.yaml
+              'assets/bg.jpg', 
               fit: BoxFit.cover,
             ),
           ),
           Container(
-            color: Colors.black.withOpacity(0.65),
+            color: Colors.black.withAlpha((0.65 * 255).toInt()),
           ),
           SafeArea(
             child: Padding(
@@ -47,15 +47,15 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Top bar
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           _NavButton(text: 'Home'),
-                          const SizedBox(width: 30),
+                          SizedBox(width: 30),
                           _NavButton(text: 'About Us'),
-                          const SizedBox(width: 30),
+                          SizedBox(width: 30),
                           _NavButton(text: 'Help'),
                         ],
                       ),
@@ -63,14 +63,14 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             'Prestige Company',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          const Icon(Icons.construction, color: Colors.white, size: 28),
+                          SizedBox(width: 10),
+                          Icon(Icons.construction, color: Colors.white, size: 28),
                         ],
                       ),
                     ],
@@ -81,12 +81,12 @@ class LoginPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Contact info (bottom left)
-                        Expanded(
+                        const Expanded(
                           flex: 1,
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
+                              padding: EdgeInsets.only(bottom: 30),
                               child: SingleChildScrollView(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -96,13 +96,13 @@ class LoginPage extends StatelessWidget {
                                       label: 'Phone',
                                       value: '+123-456-7890',
                                     ),
-                                    const SizedBox(width: 30),
+                                    SizedBox(width: 30),
                                     _ContactInfo(
                                       icon: Icons.language,
                                       label: 'Website',
                                       value: 'www.reallygreatsite.com',
                                     ),
-                                    const SizedBox(width: 30),
+                                    SizedBox(width: 30),
                                     _ContactInfo(
                                       icon: Icons.email,
                                       label: 'E-Mail',
@@ -123,11 +123,11 @@ class LoginPage extends StatelessWidget {
                               width: 430,
                               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.92),
+                                color: Colors.white.withAlpha((0.92 * 255).toInt()),
                                 borderRadius: BorderRadius.circular(32),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.18),
+                                    color: Colors.black.withAlpha((0.18 * 255).toInt()),
                                     blurRadius: 24,
                                     offset: const Offset(0, 8),
                                   ),
@@ -138,11 +138,11 @@ class LoginPage extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Center(
+                                    const Center(
                                       child: Text(
                                         'LOGIN TO YOUR\nACCOUNT',
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 28,
                                           fontWeight: FontWeight.w900,
                                           color: Color(0xFF232A3E),
@@ -151,17 +151,17 @@ class LoginPage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 32),
-                                    _Label('Username  :'),
+                                    const _Label('Username  :'),
                                     const SizedBox(height: 8),
-                                    _RoundedInput(hint: 'Enter your username'),
+                                    const _RoundedInput(hint: 'Enter your username'),
                                     const SizedBox(height: 18),
-                                    _Label('Email Address :'),
+                                    const _Label('Email Address :'),
                                     const SizedBox(height: 8),
-                                    _RoundedInput(hint: 'Enter your email'),
+                                    const _RoundedInput(hint: 'Enter your email'),
                                     const SizedBox(height: 18),
-                                    _Label('Password :'),
+                                    const _Label('Password :'),
                                     const SizedBox(height: 8),
-                                    _RoundedInput(hint: 'Enter your password', obscure: true),
+                                    const _RoundedInput(hint: 'Enter your password', obscure: true),
                                     const SizedBox(height: 32),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,7 +180,7 @@ class LoginPage extends StatelessWidget {
                                               onPressed: () {},
                                               style: TextButton.styleFrom(
                                                 padding: EdgeInsets.zero,
-                                                minimumSize: Size(0, 0),
+                                                minimumSize: const Size(0, 0),
                                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                               ),
                                               child: const Text(
