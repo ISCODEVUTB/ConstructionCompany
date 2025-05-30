@@ -1,0 +1,6 @@
+analyzer:
+  exclude:
+    - "/usr/local/flutter/**"
+    - "flutter/**"
+    - "build/**"
+    - ".dart_tool/**"

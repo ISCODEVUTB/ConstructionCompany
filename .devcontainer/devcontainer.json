@@ -1,0 +1,13 @@
+{
+  "name": "Flutter Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "postCreateCommand": "git clone https://github.com/flutter/flutter.git -b stable /usr/local/flutter && echo 'export PATH=\\$PATH:/usr/local/flutter/bin' >> /etc/profile.d/flutter.sh && export PATH=$PATH:/usr/local/flutter/bin && flutter doctor",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}
