@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.backend.app.api.endpoints import auth, dashboard, admin, clients, inventory, projects, quotes, teams
+from src.backend.app.api.endpoints import auth, dashboard, admin, clients, inventory, projects, quotes, teams, tasks, payments, users, 
 
 app = FastAPI(
     title="API de Construcción",
@@ -23,3 +23,6 @@ app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 app.include_router(clients.router, prefix="/clientes", tags=["Clientes"])
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 app.include_router(inventory.router, prefix="/inventarios", tags=["Inventarios"])
+app.include_router(users.router, prefix="/users", tags=["Usuarios"])
+app.include_router(payments.router, prefix="/payments", tags=["Pagos"])
+app.include_router(tasks.router, prefix="/tasks", tags=["Tareas"])

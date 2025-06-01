@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,13 +20,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Página Principal'),
+        title: const Text('Página Principal'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           '¡Hola, mundo!',
           style: TextStyle(fontSize: 24),
@@ -35,7 +39,7 @@ class MyHomePage extends StatelessWidget {
           // Acción al presionar el botón
         },
         tooltip: 'Incrementar',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
