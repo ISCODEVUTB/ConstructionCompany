@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'services/api_services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +22,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final apiService = ApiService();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  Future<void> _registerUser() async {
+    setState(() => _isLoading = true);
+    final response = await apiService.registerUser(
+      _usernameController.text,
+      _emailController.text,
+      _passwordController.text,
+    );
+    setState(() => _isLoading = false);
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Usuario registrado correctamente')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${response.body}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +64,9 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // Background image with dark overlay
           SizedBox.expand(
             child: Image.asset(
-              'assets/bg.jpg', 
+              'assets/bg.jpg',
               fit: BoxFit.cover,
             ),
           ),
@@ -134,90 +167,118 @@ class LoginPage extends StatelessWidget {
                                 ],
                               ),
                               child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Center(
-                                      child: Text(
-                                        'LOGIN TO YOUR\nACCOUNT',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xFF232A3E),
-                                          letterSpacing: 1.2,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    const _Label('Username  :'),
-                                    const SizedBox(height: 8),
-                                    const _RoundedInput(hint: 'Enter your username'),
-                                    const SizedBox(height: 18),
-                                    const _Label('Email Address :'),
-                                    const SizedBox(height: 8),
-                                    const _RoundedInput(hint: 'Enter your email'),
-                                    const SizedBox(height: 18),
-                                    const _Label('Password :'),
-                                    const SizedBox(height: 8),
-                                    const _RoundedInput(hint: 'Enter your password', obscure: true),
-                                    const SizedBox(height: 32),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              "Don't have an account?",
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: Color(0xFF232A3E),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                padding: EdgeInsets.zero,
-                                                minimumSize: const Size(0, 0),
-                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              ),
-                                              child: const Text(
-                                                'Sign Up now',
-                                                style: TextStyle(
-                                                  color: Colors.blue,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 48,
-                                          child: ElevatedButton(
-                                            onPressed: () {},
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color(0xFF232A3E),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(24),
-                                              ),
-                                              padding: const EdgeInsets.symmetric(horizontal: 36),
-                                            ),
-                                            child: const Text(
-                                              'LOGIN',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                letterSpacing: 1.2,
-                                              ),
-                                            ),
+                                child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Center(
+                                        child: Text(
+                                          'LOGIN TO YOUR\nACCOUNT',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xFF232A3E),
+                                            letterSpacing: 1.2,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                      const SizedBox(height: 32),
+                                      const _Label('Username  :'),
+                                      const SizedBox(height: 8),
+                                      _RoundedInput(
+                                        hint: 'Enter your username',
+                                        controller: _usernameController,
+                                      ),
+                                      const SizedBox(height: 18),
+                                      const _Label('Email Address :'),
+                                      const SizedBox(height: 8),
+                                      _RoundedInput(
+                                        hint: 'Enter your email',
+                                        controller: _emailController,
+                                      ),
+                                      const SizedBox(height: 18),
+                                      const _Label('Password :'),
+                                      const SizedBox(height: 8),
+                                      _RoundedInput(
+                                        hint: 'Enter your password',
+                                        obscure: true,
+                                        controller: _passwordController,
+                                      ),
+                                      const SizedBox(height: 32),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Don't have an account?",
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Color(0xFF232A3E),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {},
+                                                style: TextButton.styleFrom(
+                                                  padding: EdgeInsets.zero,
+                                                  minimumSize: const Size(0, 0),
+                                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                ),
+                                                child: const Text(
+                                                  'Sign Up now',
+                                                  style: TextStyle(
+                                                    color: Colors.blue,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 48,
+                                            child: ElevatedButton(
+                                              onPressed: _isLoading
+                                                  ? null
+                                                  : () {
+                                                      if (_formKey.currentState!.validate()) {
+                                                        _registerUser();
+                                                      }
+                                                    },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color(0xFF232A3E),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(24),
+                                                ),
+                                                padding: const EdgeInsets.symmetric(horizontal: 36),
+                                              ),
+                                              child: _isLoading
+                                                  ? const SizedBox(
+                                                      width: 24,
+                                                      height: 24,
+                                                      child: CircularProgressIndicator(
+                                                        color: Colors.white,
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      'LOGIN',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 18,
+                                                        letterSpacing: 1.2,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -296,11 +357,14 @@ class _Label extends StatelessWidget {
 class _RoundedInput extends StatelessWidget {
   final String hint;
   final bool obscure;
-  const _RoundedInput({required this.hint, this.obscure = false});
+  final TextEditingController? controller;
+  const _RoundedInput({required this.hint, this.obscure = false, this.controller});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       obscureText: obscure,
+      validator: (value) => value == null || value.isEmpty ? 'Campo requerido' : null,
       decoration: InputDecoration(
         hintText: hint,
         filled: true,

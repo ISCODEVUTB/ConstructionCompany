@@ -3,17 +3,16 @@
   "configurations": [
     {
       "name": "FastAPI", // Nombre de la configuración que aparecerá en el menú de depuración.
-      "type": "debugpy", // Especifica que se usará el depurador de Python (debugpy).
+      "type": "python", // Cambiado a 'python' para depuración de aplicaciones FastAPI.
       "request": "launch", // Indica que esta configuración lanzará un proceso de depuración.
-      "module": "uvicorn", // Módulo que se ejecutará para iniciar el servidor FastAPI.
+      "module": "uvicorn", // Usa el módulo 'uvicorn' como punto de entrada.
       "args": [
         "backend.app.api.main:app", // Punto de entrada de la aplicación FastAPI (ruta al objeto `app`).
         "--reload" // Habilita la recarga automática del servidor al detectar cambios en el código.
       ],
       "env": {
         "PYTHONPATH": "src" // Configura la variable de entorno `PYTHONPATH` para que las importaciones relativas funcionen.
-      },
-      "jinja": true // Habilita el soporte para plantillas Jinja2 durante la depuración.
+      }
     }
   ]
 }

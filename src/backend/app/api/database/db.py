@@ -1,7 +1,12 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from src.backend.app.api.models.users_db import Base
+import os
+from dotenv import load_dotenv
 
-DATABASE_URL = "mysql+pymysql://root:root@localhost:3306/ConstructionCompany"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -17,4 +22,6 @@ def test_connection():
 if __name__ == "__main__":
     print("Probando conexión a la base de datos...")
     test_connection()
+    # Crear tablas si no existen
+    Base.metadata.create_all(bind=engine)
 
