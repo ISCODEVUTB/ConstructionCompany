@@ -1,3 +1,0 @@
-[submodule "src/frontend/flutter"]
-	path = src/frontend/flutter
-	url = https://github.com/Jxzus/flutter-frontend.git
