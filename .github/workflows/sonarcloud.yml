@@ -33,6 +33,7 @@ jobs:
       - name: Run tests with coverage
         env:
           PYTHONPATH: ${{ github.workspace }}
+          TESTING: "1"
         run: |
           pytest --cov=src/backend/app --cov-report=xml
 
