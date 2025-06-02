@@ -6,4 +6,5 @@ uvicorn==0.23.2            # Servidor ASGI ligero para ejecutar aplicaciones Fas
 pydantic==2.5.2            # Validación de datos y settings usando Python type hints
 python-multipart==0.0.18   # Soporte para formularios multipart (subida de archivos)
 sqlalchemy==2.0.25         # ORM para bases de datos SQL en Python
-python-dotenv==1.0.0         # Cargar variables de entorno desde un archivo .env
+python-dotenv==1.0.0       # Cargar variables de entorno desde un archivo .env
+pymysql==1.1.0             # Driver MySQL para SQLAlchemy
