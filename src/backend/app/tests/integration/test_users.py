@@ -10,6 +10,7 @@ def usuario_data():
         "nombre": "Usuario Prueba",
         "email": "usuario@prueba.com",
         "rol": "admin",
+        "password": "123456",
         "id": None
     }
 
@@ -32,6 +33,7 @@ def test_eliminar_usuario():
         "nombre": "Eliminar",
         "email": "eliminar@prueba.com",
         "rol": "user",
+        "password": "123456",  # <--- Agregado
         "id": None
     }
     response = client.post("/users/", json=usuario)
