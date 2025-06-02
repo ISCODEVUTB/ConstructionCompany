@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from src.backend.app.api.models.users_db import Base
 import os
 from dotenv import load_dotenv
+from sqlalchemy.pool import StaticPool
 
 load_dotenv()
 
@@ -10,10 +11,15 @@ TESTING = os.getenv("TESTING", "0") == "1"
 
 if TESTING:
     DATABASE_URL = "sqlite:///:memory:"
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
+    )
 else:
     DATABASE_URL = os.getenv("DATABASE_URL")
+    engine = create_engine(DATABASE_URL)
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if TESTING else {})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def test_connection():
