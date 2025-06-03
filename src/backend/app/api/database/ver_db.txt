@@ -1,0 +1,6 @@
+pasos para poder ingresar a la base de datos mysql
+
+1. sudo service mysql start
+2. sudo mysql -u admin -p constructioncompany
+3. SHOW TABLES;
+4. SELECT * FROM usuarios;
