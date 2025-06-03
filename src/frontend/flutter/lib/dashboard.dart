@@ -83,12 +83,12 @@ class DashboardPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Top bar
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Dashboarb", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                        Text("Dashboarb", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                         Row(
-                          children: const [
+                          children: [
                             Icon(Icons.notifications_none, size: 32),
                             SizedBox(width: 16),
                             CircleAvatar(child: Icon(Icons.person)),

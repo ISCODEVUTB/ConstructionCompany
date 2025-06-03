@@ -43,14 +43,69 @@
 | Área          | Tecnologías |  
 |---------------|------------|  
 | Backend       | Python (FastAPI), PostgreSQL |  
-| Frontend      | React.js, Material-UI |  
-| DevOps        | Docker, GitHub Actions, AWS |  
+| Frontend      | Flutter |  
+| DevOps        | Docker, GitHub Actions |  
 | APIs          | REST (OAuth 2.0), Swagger |  
 
 
 ---
 
+## 🚀 Instalación y Ejecución
+
+1. Clona el repositorio:
+   ```bash
+   git clone <repo-url>
+   cd ConstructionCompany
+   ```
+
+2. Crea y configura tu entorno virtual:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. Configura las variables de entorno:
+   - Copia `.env.example` a `.env` y edítalo según tu entorno.
+
+4. Ejecuta la aplicación:
+   ```bash
+   uvicorn src.backend.app.api.main:app --reload
+   ```
+
+## 🧪 Pruebas
+
+- Ejecuta todas las pruebas:
+   ```bash
+   pytest --cov=src/backend/app --cov-report=xml
+   ```
+
+## 📁 Estructura del Proyecto
+
+```
+src/backend/app/
+├── api/
+│   ├── main.py
+│   ├── endpoints/
+│   ├── models/
+│   └── database/
+├── tests/
+│   └── ...
+```
+
+## 📚 Ejemplo de Uso de la API
+
+```http
+POST /purchases/
+{
+  "item_name": "Cemento",
+  "quantity": 100,
+  "price": 250.5,
+  "supplier": "Proveedor XYZ"
+}
+```
+
 ##  Licencia  
-MIT © 2025 - [Universidad Tecnológica de Bolívar](https://www.unitecnologica.edu.co/)  
+MIT © 2025 - [Universidad Tecnológica de Bolívar](https://www.unitecnologica.edu.co/)
 
 

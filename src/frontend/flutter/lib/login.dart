@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   // Nuevo: Estado para el rol
-  List<bool> _selectedRole = [true, false]; // [Usuario, Cuerpo Administrativo]
+  final List<bool> _selectedRole = [true, false]; // [Usuario, Cuerpo Administrativo]
 
   String get _selectedRoleString =>
       _selectedRole[0] ? 'user' : 'admin';
