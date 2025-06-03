@@ -40,4 +40,4 @@ app.include_router(inventory.router, prefix="/inventarios", tags=["Inventarios"]
 app.include_router(users.router, prefix="/users", tags=["Usuarios"])
 app.include_router(payments.router, prefix="/payments", tags=["Pagos"])
 app.include_router(tasks.router, prefix="/tasks", tags=["Tareas"])
-app.include_router(purchase.router, prefix="/purchase", tags=["Compras"])
+app.include_router(purchase.router, prefix="/purchases", tags=["Compras"])
