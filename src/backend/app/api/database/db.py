@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from backend.app.api.database.schemas.users_db import Base
+from backend.app.api.database.db import get_db
 import os
 from dotenv import load_dotenv
 from sqlalchemy.pool import StaticPool
@@ -29,6 +30,13 @@ def test_connection():
             print("Conexión exitosa:", result.scalar())
     except Exception as e:
         print("Error al conectar a la base de datos:", e)
+
+def get_db():
+    db: Session = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     print("Probando conexión a la base de datos...")
