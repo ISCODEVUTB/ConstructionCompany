@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from uuid import uuid4
 from src.backend.app.api.models.users import Usuario
-from src.backend.app.api.models.users_db import UsuarioDB
+from backend.app.api.database.schemas.users_db import UsuarioDB
 from src.backend.app.api.database.db import SessionLocal
 from fastapi.responses import JSONResponse
 
