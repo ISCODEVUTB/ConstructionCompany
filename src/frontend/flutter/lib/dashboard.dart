@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'inventory.dart';
+import 'projects.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -30,39 +32,40 @@ class DashboardPage extends StatelessWidget {
       width: 200,
       color: Colors.black87,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(24),
-            child: Text(
-              "Construction\nCompany",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _menuButton("DASHBOARB"),
-          _menuButton("PROJECTS"),
-          _menuButton("INVENTORY"),
-          _menuButton("PURCHASES"),
-          _menuButton("USERS"),
+          const SizedBox(height: 40),
+          _menuButton(context, "Dashboard", () {}),
+          _menuButton(context, "Inventory", () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => InventoryPage()),
+            );
+          }),
+          _menuButton(context, "Projects", () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProjectsPage()),
+            );
+          }),
+          // Agrega más botones aquí si lo deseas
         ],
       ),
     );
   }
 
-  Widget _menuButton(String text) {
+  Widget _menuButton(BuildContext context, String text, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ElevatedButton(
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey[800],
-          minimumSize: const Size.fromHeight(48),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black87,
+          minimumSize: const Size.fromHeight(40),
         ),
-        onPressed: () {},
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text(text, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: Text(text),
         ),
       ),
     );
