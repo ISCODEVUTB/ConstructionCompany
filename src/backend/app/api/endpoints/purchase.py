@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.backend.app.api.database.schemas.purchase_db import PurchaseCreate, PurchaseOut
-from src.backend.app.api.models.purchase import Purchase
-from src.backend.app.api.database import get_db
+from src.backend.app.api.models.purchase import PurchaseCreate, PurchaseOut
+from src.backend.app.api.database.schemas.purchase_db import Purchase
+from src.backend.app.api.database.db import get_db
 
 router = APIRouter(prefix="/purchases", tags=["purchases"])
 
