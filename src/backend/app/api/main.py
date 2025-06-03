@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.backend.app.api.endpoints import auth, dashboard, admin, clients, inventory, projects, quotes, teams, tasks, payments, users
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="API de Construcción",
@@ -8,6 +8,20 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://potential-xylophone-pj7vp975q569c6gx7-3000.app.github.dev",
+        "https://potential-xylophone-pj7vp975q569c6gx7-8000.app.github.dev"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Importar rutas DESPUÉS del middleware
+from src.backend.app.api.endpoints import auth, dashboard, admin, clients, inventory, projects, quotes, teams, tasks, payments, users
 
 # Endpoint raíz
 @app.get("/", summary="Página de bienvenida", description="Devuelve un mensaje de bienvenida.")

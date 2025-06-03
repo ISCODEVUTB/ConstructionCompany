@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'services/api_services.dart';
+import 'dart:ui';
+import 'dart:typed_data';
+import 'dart:io';
+import 'dart:async';
 
 void main() {
+  PlatformDispatcher.instance.sendPlatformMessage(
+    'dev.flutter/channel-buffers',
+    Uint8List.fromList('resize flutter/lifecycle 10'.codeUnits).buffer.asByteData(),
+    (ByteData? data) {},
+  );
   runApp(const MyApp());
 }
 
@@ -38,22 +47,47 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoading = false;
 
+  // Nuevo: Estado para el rol
+  List<bool> _selectedRole = [true, false]; // [Usuario, Cuerpo Administrativo]
+
+  String get _selectedRoleString =>
+      _selectedRole[0] ? 'user' : 'admin';
+
   Future<void> _registerUser() async {
     setState(() => _isLoading = true);
-    final response = await apiService.registerUser(
-      _usernameController.text,
-      _emailController.text,
-      _passwordController.text,
-    );
-    setState(() => _isLoading = false);
+    try {
+      final response = await apiService.registerUser(
+        _usernameController.text,
+        _emailController.text,
+        _passwordController.text,
+        _selectedRoleString, // Enviamos el rol
+      ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 201) {
+      setState(() => _isLoading = false);
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuario registrado correctamente')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${response.body}')),
+        );
+      }
+    } on SocketException {
+      setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuario registrado correctamente')),
+        const SnackBar(content: Text('Error de conexión de red')),
       );
-    } else {
+    } on TimeoutException {
+      setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.body}')),
+        const SnackBar(content: Text('Tiempo de espera agotado')),
+      );
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error inesperado: $e')),
       );
     }
   }
@@ -64,10 +98,12 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
+          // Fondo: si la imagen no existe, usa un color de respaldo
           SizedBox.expand(
             child: Image.asset(
               'assets/bg.jpg',
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(color: Colors.blueGrey[900]),
             ),
           ),
           Container(
@@ -206,6 +242,32 @@ class _LoginPageState extends State<LoginPage> {
                                         hint: 'Enter your password',
                                         obscure: true,
                                         controller: _passwordController,
+                                      ),
+                                      const SizedBox(height: 18),
+                                      const _Label('Select your role:'),
+                                      const SizedBox(height: 8),
+                                      Center(
+                                        child: ToggleButtons(
+                                          borderRadius: BorderRadius.circular(24),
+                                          isSelected: _selectedRole,
+                                          onPressed: (int index) {
+                                            setState(() {
+                                              for (int i = 0; i < _selectedRole.length; i++) {
+                                                _selectedRole[i] = i == index;
+                                              }
+                                            });
+                                          },
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 18),
+                                              child: Text('User'),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 18),
+                                              child: Text('Admin Staff'),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       const SizedBox(height: 32),
                                       Row(

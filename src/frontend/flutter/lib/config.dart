@@ -1,1 +1,1 @@
-const String backendUrl = "http://localhost:8000";
+const String backendUrl = "https://potential-xylophone-pj7vp975q569c6gx7-8000.app.github.dev";

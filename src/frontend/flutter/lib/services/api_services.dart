@@ -8,15 +8,16 @@ class ApiService {
     return response;
   }
 
-  Future<http.Response> registerUser(String nombre, String email, String password) async {
+  Future<http.Response> registerUser(
+      String username, String email, String password, String rol) async {
     final response = await http.post(
       Uri.parse('$backendUrl/users/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'nombre': nombre,
+        'nombre': username,
         'email': email,
         'password': password,
-        'rol': 'user',
+        'rol': rol,
       }),
     );
     return response;

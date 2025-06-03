@@ -6,7 +6,7 @@ class Usuario(BaseModel):
     nombre: str
     email: str
     password: str
-    rol: str
+    rol: str = "usuario"  # valor por defecto
 
     class Config:
         orm_mode = True

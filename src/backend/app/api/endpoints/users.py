@@ -5,6 +5,7 @@ from uuid import uuid4
 from src.backend.app.api.models.users import Usuario
 from src.backend.app.api.models.users_db import UsuarioDB
 from src.backend.app.api.database.db import SessionLocal
+from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["usuarios"])
 
@@ -22,7 +23,7 @@ def crear_usuario(usuario: Usuario, db: Session = Depends(get_db)):
         nombre=usuario.nombre,
         email=usuario.email,
         password=usuario.password,
-        rol=usuario.rol
+        rol=usuario.rol if hasattr(usuario, "rol") else "usuario"  # Valor por defecto si no viene en el request
     )
     db.add(db_usuario)
     db.commit()
@@ -41,3 +42,7 @@ def eliminar_usuario(usuario_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     db.delete(usuario)
     db.commit()
+
+@router.options("/")
+def options_usuarios():
+    return JSONResponse(content={"allow": "GET, POST, OPTIONS"}, status_code=200)

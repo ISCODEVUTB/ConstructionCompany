@@ -3,12 +3,14 @@
   "configurations": [
     {
       "name": "FastAPI", // Nombre de la configuración que aparecerá en el menú de depuración.
-      "type": "python", // Cambiado a 'python' para depuración de aplicaciones FastAPI.
+      "type": "debugpy", // Cambiado a 'python' para depuración de aplicaciones FastAPI.
       "request": "launch", // Indica que esta configuración lanzará un proceso de depuración.
       "module": "uvicorn", // Usa el módulo 'uvicorn' como punto de entrada.
       "args": [
         "backend.app.api.main:app", // Punto de entrada de la aplicación FastAPI (ruta al objeto `app`).
-        "--reload" // Habilita la recarga automática del servidor al detectar cambios en el código.
+        "--reload", // Habilita la recarga automática del servidor al detectar cambios en el código.
+        "--host", "0.0.0.0", // Establece el host en '0.0.0.0' para que sea accesible externamente.
+        "--port", "8000" // Establece el puerto en '8000'.
       ],
       "env": {
         "PYTHONPATH": "src" // Configura la variable de entorno `PYTHONPATH` para que las importaciones relativas funcionen.
