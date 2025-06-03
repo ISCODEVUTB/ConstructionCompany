@@ -1,5 +1,14 @@
 # 🏗️ Construction Company - Gestión de Proyectos  
 
+[![FastAPI](https://img.shields.io/badge/fastapi-0.100.0-green)](https://fastapi.tiangolo.com/)
+[![Pytest](https://img.shields.io/badge/pytest-tested-brightgreen)](https://docs.pytest.org/)
+[![Postgres](https://img.shields.io/badge/postgres-db-blue)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/docker-ready-blue)](https://www.docker.com/)
+[![GitHub Actions](https://img.shields.io/badge/github-actions-blue)](https://github.com/features/actions)
+[![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen)](https://pytest-cov.readthedocs.io/)
+
+---
+
 **Sistema integral para optimizar la gestión de proyectos, recursos y costos en empresas de construcción.**  
 
 ---
