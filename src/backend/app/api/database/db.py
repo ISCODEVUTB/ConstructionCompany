@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
 from backend.app.api.database.schemas.users_db import Base
-from backend.app.api.database.db import get_db
 import os
 from dotenv import load_dotenv
 from sqlalchemy.pool import StaticPool
