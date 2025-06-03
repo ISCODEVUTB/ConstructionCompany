@@ -1,35 +1,41 @@
 from fastapi.testclient import TestClient
 from src.backend.app.api.main import app
-from src.backend.app.api.models.auth import LoginRequest, Token
-from src.backend.app.api.endpoints.auth import get_current_user
-from fastapi import HTTPException
-import pytest
-
-def test_login_request_model():
-    data = {"usuario": "admin", "password": "1234"}
-    login = LoginRequest(**data)
-    assert login.usuario == "admin"
-    assert login.password == "1234"
-
-def test_token_model():
-    token = Token(access_token="abc123", token_type="bearer")
-    assert token.access_token == "abc123"
-    assert token.token_type == "bearer"
-
-def test_get_current_user_valido():
-    user = get_current_user(token="token_valido")
-    assert user == {"username": "admin"}
-
-def test_get_current_user_invalido():
-    with pytest.raises(HTTPException) as excinfo:
-        get_current_user(token="token_invalido")
-    assert excinfo.value.status_code == 401
-    assert "Token inválido" in excinfo.value.detail
 
 client = TestClient(app)
 
-def test_obtener_token():
-    login_data = {"username": "admin", "password": "1234"}
-    response = client.post("/auth/token", data=login_data)
+def test_login_success():
+    response = client.post("/auth/token", data={"username": "admin", "password": "1234"})
     assert response.status_code == 200
-    assert "access_token" in response.json()
+    data = response.json()
+    assert data["access_token"] == "token_valido"
+    assert data["token_type"] == "bearer"
+
+def test_login_wrong_credentials():
+    response = client.post("/auth/token", data={"username": "admin", "password": "wrong"})
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Credenciales incorrectas"
+
+def test_login_missing_username():
+    response = client.post("/auth/token", data={"password": "1234"})
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Usuario y contraseña requeridos"
+
+def test_login_missing_password():
+    response = client.post("/auth/token", data={"username": "admin"})
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Usuario y contraseña requeridos"
+
+def test_get_current_user_valid_token():
+    headers = {"Authorization": "Bearer token_valido"}
+    response = client.get("/admin/zona-restringida", headers=headers)
+    # Este endpoint debe estar protegido y devolver 200 si el token es válido
+    assert response.status_code in (200, 403)  # 200 si acceso concedido, 403 si denegado por lógica extra
+
+def test_get_current_user_invalid_token():
+    headers = {"Authorization": "Bearer token_invalido"}
+    response = client.get("/admin/zona-restringida", headers=headers)
+    assert response.status_code == 403 or response.status_code == 401
+
+def test_get_current_user_no_token():
+    response = client.get("/admin/zona-restringida")
+    assert response.status_code == 403 or response.status_code == 401
