@@ -16,3 +16,12 @@ __pycache__/
 # Ignorar dependencias instaladas
 node_modules/
 
+# Ignorar el SDK de Flutter descargado en la raíz
+/flutter/
+
+# Ignorar archivos con caracteres especiales problemáticos (ejemplo)
+/flutter/engine/src/flutter/impeller/fixtures/sa%m#ple.vert
+
+# Ignorar salidas de compilación de Flutter
+src/frontend/flutter/build/
+
