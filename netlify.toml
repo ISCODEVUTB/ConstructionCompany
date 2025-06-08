@@ -1,6 +1,6 @@
 [build]
   base = "src/frontend/flutter"
-  publish = "src/frontend/flutter/build/web"
+  publish = "build/web"
   command = "./build.sh"
 
 [build.environment]
