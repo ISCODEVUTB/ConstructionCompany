@@ -17,4 +17,4 @@ COPY src ./src
 EXPOSE 8000
 
 # Comando para ejecutar el servidor
-CMD ["uvicorn", "src.backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.backend.app.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

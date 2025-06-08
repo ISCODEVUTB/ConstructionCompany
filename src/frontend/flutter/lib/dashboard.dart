@@ -38,7 +38,7 @@ class DashboardPage extends StatelessWidget {
           _menuButton(context, "Inventory", () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => InventoryPage()),
+              MaterialPageRoute(builder: (context) => const InventoryPage()),
             );
           }),
           _menuButton(context, "Projects", () {

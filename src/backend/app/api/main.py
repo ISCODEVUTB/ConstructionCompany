@@ -12,8 +12,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://potential-xylophone-pj7vp975q569c6gx7-3000.app.github.dev",
-        "https://potential-xylophone-pj7vp975q569c6gx7-8000.app.github.dev"
+        "https://ominous-guacamole-jj6px9gq6vjf9qg-3000.app.github.dev",
+        "https://ominous-guacamole-jj6px9gq6vjf9qg-8000.app.github.dev/"
     ],
     allow_credentials=True,
     allow_methods=["*"],
