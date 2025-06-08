@@ -1,7 +1,7 @@
 [build]
   base = "src/frontend/flutter"
   publish = "src/frontend/flutter/build/web"
-  command = "../../scripts/build-flutter.sh"
+  command = "./build.sh"
 
 [build.environment]
   FLUTTER_VERSION = "3.22.0"
